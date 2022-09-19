@@ -1,8 +1,9 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
-	id 'io.github.juuxel.loom-quiltflower' version '1.6.1'
-	id "org.quiltmc.quilt-mappings-on-loom" version "4.0.0"
+	id 'fabric-loom' version '1.0-SNAPSHOT'
+	id 'io.github.juuxel.loom-quiltflower' version '1.7.3'
+	id "org.quiltmc.quilt-mappings-on-loom" version "4.2.0"
 	id 'maven-publish'
+	id 'signing'
 }
 
 // Visual Studio Code completely ignores options.release.
@@ -23,6 +24,19 @@ sourceSets {
 	}
 }
 
+configurations {
+	apiElements {
+		outgoing {
+			capability("io.github.ennuil:libzoomer:${version}")
+		}
+	}
+	runtimeElements {
+		outgoing {
+			capability("io.github.ennuil:libzoomer:${version}")
+		}
+	}
+}
+
 dependencies {
 	// To change the versions, see the gradle.properties file
 	minecraft libs.minecraft
@@ -31,6 +45,7 @@ dependencies {
 	}
 	modImplementation libs.fabric.loader
 
+	modCompileOnly libs.fabric.api
 	modLocalRuntime libs.fabric.api
 
 	afterEvaluate {
@@ -77,8 +92,8 @@ publishing {
 
 			pom {
 				name = 'LibZoomer'
-				description = 'A library that allows other Minecraft mods to have powerful zooming easily.'
-				url = 'https://github.com/EnnuiL/LibZoomer'
+				description = 'A library that allows other Minecraft mods to have powerful zooming easily. (internal fork)'
+				url = 'https://github.com/Parzivail-Modding-Team/LibZoomer'
 				licenses {
 					license {
 						name = 'The MIT License'
@@ -92,9 +107,9 @@ publishing {
 					}
 				}
 				scm {
-					connection = 'scm:git:https://github.com/EnnuiL/LibZoomer.git'
-					developerConnection = 'scm:git:git@github.com:EnnuiL/LibZoomer.git'
-					url = 'https://github.com/EnnuiL/LibZoomer'
+					connection = 'scm:git:https://github.com/Parzivail-Modding-Team/LibZoomer.git'
+					developerConnection = 'scm:git:git@github.com:Parzivail-Modding-Team/LibZoomer.git'
+					url = 'https://github.com/Parzivail-Modding-Team/LibZoomer'
 				}
 			}
 		}
@@ -103,6 +118,20 @@ publishing {
 	// Select the repositories you want to publish to
 	// To publish to maven local, no extra repositories are necessary. Just use the task `publishToMavenLocal`.
 	repositories {
-		// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+		maven {
+			name = "central"
+			url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+			if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword"))
+				credentials {
+					username = ossrhUsername
+					password = ossrhPassword
+				}
+		}
 	}
+}
+
+signing {
+	useGpgCmd()
+	sign publishing.publications.mavenJava
 }

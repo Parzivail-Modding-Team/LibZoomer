@@ -33,9 +33,8 @@ public abstract class MouseMixin {
 
     @Inject(
         at = @At(
-            value = "FIELD",
-            target = "net/minecraft/client/option/GameOptions.invertYMouse:Z",
-            opcode = Opcodes.GETFIELD
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/option/GameOptions;getInvertYMouse()Lnet/minecraft/client/option/Option;"
         ),
         method = "updateLookDirection()V",
         locals = LocalCapture.CAPTURE_FAILHARD
@@ -63,9 +62,8 @@ public abstract class MouseMixin {
 
     @ModifyVariable(
         at = @At(
-            value = "FIELD",
-            target = "net/minecraft/client/option/GameOptions.invertYMouse:Z",
-            opcode = Opcodes.GETFIELD
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/option/GameOptions;getInvertYMouse()Lnet/minecraft/client/option/Option;"
         ),
         method = "updateLookDirection()V",
         ordinal = 2
@@ -77,9 +75,8 @@ public abstract class MouseMixin {
 
     @ModifyVariable(
         at = @At(
-            value = "FIELD",
-            target = "net/minecraft/client/option/GameOptions.invertYMouse:Z",
-            opcode = Opcodes.GETFIELD
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/option/GameOptions;getInvertYMouse()Lnet/minecraft/client/option/Option;"
         ),
         method = "updateLookDirection()V",
         ordinal = 3
