@@ -24,19 +24,6 @@ sourceSets {
 	}
 }
 
-configurations {
-	apiElements {
-		outgoing {
-			capability("io.github.ennuil:libzoomer:${version}")
-		}
-	}
-	runtimeElements {
-		outgoing {
-			capability("io.github.ennuil:libzoomer:${version}")
-		}
-	}
-}
-
 dependencies {
 	// To change the versions, see the gradle.properties file
 	minecraft libs.minecraft
