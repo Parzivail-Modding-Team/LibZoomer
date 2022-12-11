@@ -13,16 +13,18 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpyglassItem;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class LibZoomerTestMod implements ModInitializer {
     // Michael. He's a reimplementation of the spyglass. Tests if the spyglass can be replicated.
-    private static final Item MICHAEL_ITEM = new SpyglassItem(new FabricItemSettings().group(ItemGroup.TOOLS).maxCount(1));
+    private static final Item MICHAEL_ITEM = new SpyglassItem(new FabricItemSettings().maxCount(1));
 
     // Michelle. She's an implementation of a very simple zoom key. Tests if there are zoom instance conflicts and spyglass-unrelated things.
     private static final KeyBind MICHELLE_KEY = KeyBindingHelper.registerKeyBinding(new KeyBind(
@@ -55,7 +57,8 @@ public class LibZoomerTestMod implements ModInitializer {
         }
         
         // Register the Michael item
-        Registry.register(Registry.ITEM, new Identifier("libzoomertest:michael"), MICHAEL_ITEM);
+        Registry.register(Registries.ITEM, new Identifier("libzoomertest:michael"), MICHAEL_ITEM);
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.addItem(MICHAEL_ITEM));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             // This is how you get a spyglass-like zoom working
