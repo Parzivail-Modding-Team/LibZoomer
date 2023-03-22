@@ -1,5 +1,6 @@
 package io.github.ennuil.libzoomer.mixin;
 
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,15 +40,13 @@ public class InGameHudMixin {
     }
 
     // Yes, there is a renderOverlay for being frozen...
-    @Inject(
-        at = @At("HEAD"),
-        method = {
-            "renderSpyglassOverlay",
-            "renderOverlay"
-        },
-        cancellable = true
-    )
-    public void cancelOverlay(float scale, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "renderSpyglassOverlay", cancellable = true)
+    public void cancelSpyglassOverlay(MatrixStack matrices, float scale, CallbackInfo ci) {
+        if (this.shouldCancelOverlay) ci.cancel();
+    }
+
+    @Inject(at = @At("HEAD"), method = "renderOverlay", cancellable = true)
+    public void cancelOverlay(MatrixStack matrices, Identifier texture, float opacity, CallbackInfo ci) {
         if (this.shouldCancelOverlay) ci.cancel();
     }
 

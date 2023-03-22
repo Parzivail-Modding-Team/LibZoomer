@@ -58,7 +58,7 @@ public class LibZoomerTestMod implements ModInitializer {
         
         // Register the Michael item
         Registry.register(Registries.ITEM, new Identifier("libzoomertest:michael"), MICHAEL_ITEM);
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> entries.addItem(MICHAEL_ITEM));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS_AND_UTILITIES).register(entries -> entries.addItem(MICHAEL_ITEM));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             // This is how you get a spyglass-like zoom working
