@@ -1,9 +1,9 @@
 [versions]
-minecraft = "1.19.4"
-quilt-mappings = "1.19.4+build.4" # Latest version is available at https://lambdaurora.dev/tools/import_quilt.html
-fabric-loader = "0.14.18" # Latest version is available at https://fabricmc.net/versions.html
+minecraft = "1.20"
+quilt-mappings = "1.20+build.1" # Latest version is available at https://lambdaurora.dev/tools/import_quilt.html
+fabric-loader = "0.14.21" # Latest version is available at https://fabricmc.net/versions.html
 
-fabric-api = "0.76.0+1.19.4"
+fabric-api = "0.83.0+1.20"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }

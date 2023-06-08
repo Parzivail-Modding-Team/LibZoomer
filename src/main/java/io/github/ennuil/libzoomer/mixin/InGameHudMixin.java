@@ -1,6 +1,5 @@
 package io.github.ennuil.libzoomer.mixin;
 
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,8 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.ennuil.libzoomer.api.ZoomInstance;
 import io.github.ennuil.libzoomer.api.ZoomOverlay;
 import io.github.ennuil.libzoomer.api.ZoomRegistry;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
@@ -23,9 +23,9 @@ public class InGameHudMixin {
             value = "INVOKE",
             target = "net/minecraft/client/MinecraftClient.getLastFrameDuration()F"
         ),
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;F)V"
+        method = "render(Lnet/minecraft/client/gui/GuiGraphics;F)V"
     )
-    public void injectZoomOverlay(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    public void injectZoomOverlay(GuiGraphics graphics, float tickDelta, CallbackInfo ci) {
         this.shouldCancelOverlay = false;
         for (ZoomInstance instance : ZoomRegistry.getZoomInstances()) {
             ZoomOverlay overlay = instance.getZoomOverlay();
@@ -41,12 +41,12 @@ public class InGameHudMixin {
 
     // Yes, there is a renderOverlay for being frozen...
     @Inject(at = @At("HEAD"), method = "renderSpyglassOverlay", cancellable = true)
-    public void cancelSpyglassOverlay(MatrixStack matrices, float scale, CallbackInfo ci) {
+    public void cancelSpyglassOverlay(GuiGraphics graphics, float scale, CallbackInfo ci) {
         if (this.shouldCancelOverlay) ci.cancel();
     }
 
     @Inject(at = @At("HEAD"), method = "renderOverlay", cancellable = true)
-    public void cancelOverlay(MatrixStack matrices, Identifier texture, float opacity, CallbackInfo ci) {
+    public void cancelOverlay(GuiGraphics graphics, Identifier texture, float opacity, CallbackInfo ci) {
         if (this.shouldCancelOverlay) ci.cancel();
     }
 
@@ -56,9 +56,9 @@ public class InGameHudMixin {
             value = "INVOKE",
             target = "net/minecraft/client/network/ClientPlayerEntity.getFrozenTicks()I"
         ),
-        method = "render(Lnet/minecraft/client/util/math/MatrixStack;F)V"
+        method = "render(Lnet/minecraft/client/gui/GuiGraphics;F)V"
     )
-    public void disableOverlayCancelling(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    public void disableOverlayCancelling(GuiGraphics graphics, float tickDelta, CallbackInfo ci) {
         if (this.shouldCancelOverlay) {
             this.shouldCancelOverlay = false;
         }
